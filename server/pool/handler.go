@@ -3,9 +3,9 @@ package pool
 type RequestHandler func(params interface{}) (interface{}, error)
 
 var Handler = map[string]RequestHandler{
-	"/block/best":       getBestBlock,
-	"/block/hash":       getBlockByHash,
-	"/block/list":       getBlockList,
-	"/transaction/hash": getTxByHash,
-	"/address/hash":     getAddressInfo,
+	"/rpc/block/best":       getBestBlock,
+	"/rpc/block/hash":       getBlockByHash,
+	"/rpc/block/list":       getBlockList,
+	"/rpc/transaction/hash": getTxByHash,
+	"/rpc/address/hash":     getAddressInfo,
 }

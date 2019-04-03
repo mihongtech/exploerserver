@@ -5,11 +5,11 @@ import (
 )
 
 var Params = map[string]reflect.Type{
-	"/block/list":               reflect.TypeOf((*BlockListParams)(nil)),
-	"/block/hash":               reflect.TypeOf((*BlockHashParams)(nil)),
-	"/transaction/hash":         reflect.TypeOf((*TransactionHashParams)(nil)),
-	"/address/hash":             reflect.TypeOf((*AddressParams)(nil)),
-	"/wallet/import/privateKey": reflect.TypeOf((*ImportAccountParams)(nil)),
+	"/rpc/block/list":               reflect.TypeOf((*BlockListParams)(nil)),
+	"/rpc/block/hash":               reflect.TypeOf((*BlockHashParams)(nil)),
+	"/rpc/transaction/hash":         reflect.TypeOf((*TransactionHashParams)(nil)),
+	"/rpc/address/hash":             reflect.TypeOf((*AddressParams)(nil)),
+	"/rpc/wallet/import/privateKey": reflect.TypeOf((*ImportAccountParams)(nil)),
 }
 
 // block
