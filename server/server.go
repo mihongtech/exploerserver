@@ -70,7 +70,10 @@ func (s *Server) Start() {
 	})
 
 	log.Info(fmt.Sprintf("Server start at %s", httpServer.Addr))
-	httpServer.ListenAndServe()
+	err := httpServer.ListenAndServe()
+	if err != nil {
+		log.Error(err.Error())
+	}
 }
 
 func getParams(path string, s []byte) (interface{}, error) {
