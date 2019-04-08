@@ -12,22 +12,28 @@ import (
 )
 
 func Sync() {
-	height := GetDBLastBlock()
+	b, err := GetBestBlock()
+	if err != nil {
+		return
+	}
+	dbHeight := GetDBLastBlock()
+	// DB height equal best height, not need sync
+	if dbHeight == int(b.Height) {
+		return
+	}
 	// when DB is empty, sync block from height 0
-	if height < 0 {
-		SyncBlockByHeight(0)
+	if dbHeight < 0 {
+		SyncBlockByHeight(0, b.Height)
 	} else {
-		b, err := GetBestBlock()
+		forkHeight, err := getForkHeight(b.Height)
 		if err != nil {
 			return
 		}
-		forkHeight, err := getSameForkHeight(b.Height)
-		// when DB height more than fork height, remove block
-		if int(forkHeight) < height {
+		// when DB height higher than fork height, remove db block which higher than fork height
+		if int(forkHeight) < dbHeight {
 			removeDBBlock(forkHeight)
-		} else {
-			SyncBlockByHeight(int(forkHeight + 1))
 		}
+		SyncBlockByHeight(int(forkHeight+1), b.Height)
 	}
 }
 
@@ -40,14 +46,14 @@ func removeDBBlock(height uint32) {
 }
 
 // get the latest block in DB which on the same fork with linkchain
-func getSameForkHeight(height uint32) (uint32, error) {
+func getForkHeight(height uint32) (uint32, error) {
 	bs, err := pool.GetDBBlockSummaryByHeight(height)
 	if err != nil {
 		return 0, err
 	}
 	if bs == nil {
 		if height > 0 {
-			return getSameForkHeight(height - 1)
+			return getForkHeight(height - 1)
 		} else {
 			return 0, nil
 		}
@@ -84,7 +90,10 @@ func GetBestBlock() (*rpcobject.BlockRSP, error) {
 }
 
 // sync blockchain block info
-func SyncBlockByHeight(height int) {
+func SyncBlockByHeight(height int, best uint32) {
+	if height > int(best) {
+		return
+	}
 	s, err := callRpc("getBlockByHeight", pool.BlockHeightParams{Height: height})
 	if err != nil {
 		log.Error(err.Error())
@@ -127,5 +136,5 @@ func SyncBlockByHeight(height int) {
 	tx.Commit()
 	db.Close()
 
-	SyncBlockByHeight(height + 1)
+	SyncBlockByHeight(height+1, best)
 }
