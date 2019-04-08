@@ -6,8 +6,9 @@ import (
 
 	"github.com/linkchain/common/util/log"
 	"github.com/robfig/cron"
-	"hum.tan/server/server"
-	"hum.tan/server/server/client"
+
+	"github.com/linkchain-explorer/server"
+	"github.com/linkchain-explorer/server/client"
 )
 
 func main() {

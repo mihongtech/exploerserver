@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"hum.tan/server/server/pool"
-
 	"github.com/linkchain/core/meta"
 	"github.com/linkchain/rpc/rpcobject"
+
+	"github.com/linkchain-explorer/server/pool"
 )
 
 func SaveTransactionDetail(tx *sql.Tx, height uint32, transactionHashList []string) error {

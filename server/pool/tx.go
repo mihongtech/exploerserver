@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"math/big"
 
-	"hum.tan/server/db"
-	"hum.tan/server/server/resp"
+	"github.com/linkchain-explorer/db"
+	"github.com/linkchain-explorer/server/resp"
 )
 
 // get transaction by hash

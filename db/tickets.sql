@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50725
 File Encoding         : 65001
 
-Date: 2019-04-03 21:27:37
+Date: 2019-04-08 11:21:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,6 +20,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `tickets`;
 CREATE TABLE `tickets` (
+  `height` int(10) DEFAULT NULL,
   `tx_id` varchar(255) DEFAULT NULL,
   `account_id` varchar(255) DEFAULT NULL,
   `index` int(10) DEFAULT NULL,

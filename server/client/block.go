@@ -6,8 +6,9 @@ import (
 
 	"github.com/linkchain/common/util/log"
 	"github.com/linkchain/rpc/rpcobject"
-	"hum.tan/server/db"
-	"hum.tan/server/server/pool"
+
+	"github.com/linkchain-explorer/db"
+	"github.com/linkchain-explorer/server/pool"
 )
 
 func Sync() {

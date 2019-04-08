@@ -4,8 +4,9 @@ import (
 	"database/sql"
 
 	"github.com/linkchain/common/util/log"
-	"hum.tan/server/db"
-	"hum.tan/server/server/resp"
+
+	"github.com/linkchain-explorer/db"
+	"github.com/linkchain-explorer/server/resp"
 )
 
 func GetDBBlockSummaryByHeight(height uint32) (*resp.BlockSummary, error) {

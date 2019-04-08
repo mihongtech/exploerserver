@@ -1,8 +1,8 @@
 package pool
 
 import (
-	"hum.tan/server/db"
-	"hum.tan/server/server/resp"
+	"github.com/linkchain-explorer/db"
+	"github.com/linkchain-explorer/server/resp"
 )
 
 func getAddressInfo(params interface{}) (interface{}, error) {
