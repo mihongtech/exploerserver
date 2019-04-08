@@ -18,15 +18,11 @@ func main() {
 		log.LvlFilterHandler(log.Lvl(*logLevel),
 			log.StreamHandler(os.Stdout, log.TerminalFormat(true))))
 
-	height := client.GetDBLastBlock()
-	client.SyncBlockByHeight(height + 1)
-
 	go func() {
 		c := cron.New()
-		spec := "0 0/2 * * * ?"
+		spec := "0 0/1 * * * ?"
 		_ = c.AddFunc(spec, func() {
-			height := client.GetDBLastBlock()
-			client.SyncBlockByHeight(height + 1)
+			client.Sync()
 		})
 		log.Info("Start sync block and transaction info")
 		c.Start()

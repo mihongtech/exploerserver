@@ -2,12 +2,57 @@ package client
 
 import (
 	"encoding/json"
+	"fmt"
 
 	"github.com/linkchain/common/util/log"
 	"github.com/linkchain/rpc/rpcobject"
 	"hum.tan/server/db"
 	"hum.tan/server/server/pool"
 )
+
+func Sync() {
+	height := GetDBLastBlock()
+	// when DB is empty, sync block from height 0
+	if height < 0 {
+		SyncBlockByHeight(0)
+	} else {
+		b, err := GetBestBlock()
+		if err != nil {
+			return
+		}
+		forkHeight, err := getSameForkHeight(b.Height)
+		// when DB height more than fork height, remove block
+		if int(forkHeight) < height {
+			removeDBBlock(forkHeight)
+		} else {
+			SyncBlockByHeight(int(forkHeight + 1))
+		}
+	}
+}
+
+func removeDBBlock(height uint32) {
+	db := db.NewDB()
+	defer db.Close()
+	db.Exec("DELETE FROM blocks WHERE height > ?", height)
+	db.Exec("DELETE FROM transactions WHERE height > ?", height)
+	db.Exec("DELETE FROM tickets WHERE height > ?", height)
+}
+
+// get the latest block in DB which on the same fork with linkchain
+func getSameForkHeight(height uint32) (uint32, error) {
+	bs, err := pool.GetDBBlockSummaryByHeight(height)
+	if err != nil {
+		return 0, err
+	}
+	if bs == nil {
+		if height > 0 {
+			return getSameForkHeight(height - 1)
+		} else {
+			return 0, nil
+		}
+	}
+	return bs.Height, nil
+}
 
 // get the highest block height
 func GetDBLastBlock() int {
@@ -18,6 +63,23 @@ func GetDBLastBlock() int {
 	height := -1
 	row.Scan(&height)
 	return height
+}
+
+// get best block
+func GetBestBlock() (*rpcobject.BlockRSP, error) {
+	s, err := callRpc("getBestBlock", nil)
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	var block = &rpcobject.BlockRSP{}
+	err = json.Unmarshal(s, block)
+	if err != nil {
+		log.Error(err.Error())
+		return nil, err
+	}
+	return block, nil
+
 }
 
 // sync blockchain block info
@@ -60,7 +122,7 @@ func SyncBlockByHeight(height int) {
 		return
 	}
 
-	log.Info("Sync block success: block height: ", height)
+	log.Info(fmt.Sprintf("Sync block success: block height: %d", height))
 	tx.Commit()
 	db.Close()
 

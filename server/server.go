@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"reflect"
@@ -68,7 +69,7 @@ func (s *Server) Start() {
 		result(writer, res)
 	})
 
-	log.Info("Server start at ", httpServer.Addr)
+	log.Info(fmt.Sprintf("Server start at %s", httpServer.Addr))
 	httpServer.ListenAndServe()
 }
 

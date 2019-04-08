@@ -44,7 +44,7 @@ func SaveTransaction(tx *sql.Tx, height uint32, transactionHash string) error {
 			}
 		}
 		if transaction.Tx.To.Coins != nil {
-			err := SaveTransactionTo(tx, transaction.Tx.To.Coins, transactionHash)
+			err := SaveTransactionTo(tx, height, transaction.Tx.To.Coins, transactionHash)
 			if err != nil {
 				return err
 			}
@@ -74,13 +74,13 @@ func SaveTransactionFrom(tx *sql.Tx, coins []meta.FromCoin, transactionHash stri
 	return nil
 }
 
-func SaveTransactionTo(tx *sql.Tx, coins []meta.ToCoin, transactionHash string) error {
+func SaveTransactionTo(tx *sql.Tx, height uint32, coins []meta.ToCoin, transactionHash string) error {
 	var values []string
 	for i, coin := range coins {
-		values = append(values, fmt.Sprintf("('%s', '%s', %d, %d)",
-			transactionHash, coin.Id, i, coin.Value.GetInt64()))
+		values = append(values, fmt.Sprintf("(%d, '%s', '%s', %d, %d)",
+			height, transactionHash, coin.Id, i, coin.Value.GetInt64()))
 	}
-	_, err := tx.Exec("INSERT INTO tickets(tx_id, account_id, `index`, amount) VALUES " + strings.Join(values, ","))
+	_, err := tx.Exec("INSERT INTO tickets(height, tx_id, account_id, `index`, amount) VALUES " + strings.Join(values, ","))
 	if err != nil {
 		return err
 	}

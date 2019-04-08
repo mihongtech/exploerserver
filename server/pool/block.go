@@ -1,10 +1,27 @@
 package pool
 
 import (
+	"database/sql"
+
 	"github.com/linkchain/common/util/log"
 	"hum.tan/server/db"
 	"hum.tan/server/server/resp"
 )
+
+func GetDBBlockSummaryByHeight(height uint32) (*resp.BlockSummary, error) {
+	db := db.NewDB()
+	defer db.Close()
+	row := db.QueryRow("SELECT height, hash, time FROM blocks WHERE height=?", height)
+	block := &resp.BlockSummary{}
+	err := row.Scan(&block.Height, &block.Hash, &block.Time)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, resp.NotFoundErr
+	}
+	return block, nil
+}
 
 func getBestBlock(params interface{}) (interface{}, error) {
 	db := db.NewDB()
