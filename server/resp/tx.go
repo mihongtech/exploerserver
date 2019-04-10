@@ -19,4 +19,5 @@ type Ticket struct {
 	Amount    *big.Int       `json:"amount"`      // Amount of the Ticket.
 	TxID      string         `json:"tx_id"`       // Transaction Hash of the Ticket generate.
 	SpendTxID sql.NullString `json:"spend_tx_id"` // Transaction Hash of the Ticket spend.
+	Index     uint32         `json:"index"`
 }

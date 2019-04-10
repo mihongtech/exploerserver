@@ -16,20 +16,22 @@ func getAddressInfo(params interface{}) (interface{}, error) {
 	if err != nil {
 		return nil, resp.InternalServerErr
 	}
-	var TxIDMap = map[string]int{}
+	var TxIDList []string
 	for row.Next() {
 		ticket := &resp.Ticket{}
 		err := row.Scan(&ticket.TxID, &ticket.SpendTxID)
 		if err != nil {
 			return nil, resp.InternalServerErr
 		}
-		TxIDMap[ticket.TxID] = 0
-		if ticket.SpendTxID.Valid {
-			TxIDMap[ticket.SpendTxID.String] = 0
+		if !contain(TxIDList, ticket.TxID) {
+			TxIDList = append(TxIDList, ticket.TxID)
+		}
+		if ticket.SpendTxID.Valid && !contain(TxIDList, ticket.SpendTxID.String) {
+			TxIDList = append(TxIDList, ticket.SpendTxID.String)
 		}
 	}
 	var transactionList []resp.Transaction
-	for TxID := range TxIDMap {
+	for _, TxID := range TxIDList {
 		transaction := &resp.Transaction{TxID: TxID}
 		err = getTx(db, transaction)
 		if err != nil {
@@ -38,4 +40,13 @@ func getAddressInfo(params interface{}) (interface{}, error) {
 		transactionList = append(transactionList, *transaction)
 	}
 	return transactionList, nil
+}
+
+func contain(arr []string, str string) bool {
+	for _, a := range arr {
+		if a == str {
+			return true
+		}
+	}
+	return false
 }

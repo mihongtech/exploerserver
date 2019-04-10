@@ -44,7 +44,7 @@ func getTx(db *sql.DB, transaction *resp.Transaction) error {
 }
 
 func getTxFrom(db *sql.DB, transaction *resp.Transaction) ([]resp.Ticket, error) {
-	rows, err := db.Query("SELECT tx_id, account_id, amount, spend_tx_id FROM tickets WHERE spend_tx_id=?", transaction.TxID)
+	rows, err := db.Query("SELECT tx_id, account_id, amount, spend_tx_id, `index` FROM tickets WHERE spend_tx_id=?", transaction.TxID)
 	if err != nil {
 		return nil, resp.InternalServerErr
 	}
@@ -53,7 +53,7 @@ func getTxFrom(db *sql.DB, transaction *resp.Transaction) ([]resp.Ticket, error)
 	for rows.Next() {
 		f := resp.Ticket{}
 		var amount int64
-		err := rows.Scan(&f.TxID, &f.AccountID, &amount, &f.SpendTxID)
+		err := rows.Scan(&f.TxID, &f.AccountID, &amount, &f.SpendTxID, &f.Index)
 		if err != nil {
 			return nil, resp.InternalServerErr
 		}

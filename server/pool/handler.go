@@ -8,4 +8,5 @@ var Handler = map[string]RequestHandler{
 	"/rpc/block/list":       getBlockList,
 	"/rpc/transaction/hash": getTxByHash,
 	"/rpc/address/hash":     getAddressInfo,
+	"/rpc/search/global":    globalSearch,
 }

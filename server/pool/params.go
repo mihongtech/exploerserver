@@ -9,6 +9,7 @@ var Params = map[string]reflect.Type{
 	"/rpc/block/hash":               reflect.TypeOf((*BlockHashParams)(nil)),
 	"/rpc/transaction/hash":         reflect.TypeOf((*TransactionHashParams)(nil)),
 	"/rpc/address/hash":             reflect.TypeOf((*AddressParams)(nil)),
+	"/rpc/search/global":            reflect.TypeOf((*GlobalSearchParams)(nil)),
 	"/rpc/wallet/import/privateKey": reflect.TypeOf((*ImportAccountParams)(nil)),
 }
 
@@ -39,4 +40,9 @@ type ImportAccountParams struct {
 // address
 type AddressParams struct {
 	Hash string `json:"hash"`
+}
+
+// search
+type GlobalSearchParams struct {
+	Keyword string `json:"keyword"`
 }
