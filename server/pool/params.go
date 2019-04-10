@@ -40,6 +40,8 @@ type ImportAccountParams struct {
 // address
 type AddressParams struct {
 	Hash string `json:"hash"`
+	Page int    `json:"page"`
+	Size int    `json:"size"`
 }
 
 // search
