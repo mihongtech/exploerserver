@@ -59,7 +59,7 @@ func getAddressInfo(params interface{}) (interface{}, error) {
 	}
 	var pagerTxIDList []string
 	if a.Page*a.Size < count {
-		pagerTxIDList = TxIDList[(a.Page-1)*a.Size : a.Size]
+		pagerTxIDList = TxIDList[(a.Page-1)*a.Size : a.Page*a.Size]
 	} else {
 		pagerTxIDList = TxIDList[(a.Page-1)*a.Size:]
 	}
