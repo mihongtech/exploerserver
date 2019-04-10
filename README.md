@@ -1,5 +1,20 @@
 # linkchain-explorer
 
+## Mysql
+
+Download [mysql](https://www.mysql.com/downloads/) if you haven't already
+
+Config your mysql dsn at file `db/db.go`
+```
+...
+var dsn = "dbusername:dbpassword@tcp(dbhost:dbport)/dbname?charset=utf8&parseTime=true"
+...
+```
+
+Import tables `blocks` `transactions` `tickets`
+
+The sql file in the directory `db`
+
 ## Installation (Linux or Mac)
 
 Build program
