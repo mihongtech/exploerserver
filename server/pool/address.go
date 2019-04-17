@@ -1,8 +1,8 @@
 package pool
 
 import (
-	"github.com/linkchain-explorer/db"
-	"github.com/linkchain-explorer/server/resp"
+	"github.com/mihongtech/linkchain-explorer/db"
+	"github.com/mihongtech/linkchain-explorer/server/resp"
 )
 
 func getAddressInfo(params interface{}) (interface{}, error) {

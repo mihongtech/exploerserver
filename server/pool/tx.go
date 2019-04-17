@@ -3,9 +3,10 @@ package pool
 import (
 	"database/sql"
 	"math/big"
+	"time"
 
-	"github.com/linkchain-explorer/db"
-	"github.com/linkchain-explorer/server/resp"
+	"github.com/mihongtech/linkchain-explorer/db"
+	"github.com/mihongtech/linkchain-explorer/server/resp"
 )
 
 // get transaction by hash
@@ -90,4 +91,22 @@ func getBlockSummary(db *sql.DB, transaction *resp.Transaction) error {
 		return resp.InternalServerErr
 	}
 	return nil
+}
+
+func getLastHourTransactionCount(params interface{}) (interface{}, error) {
+	db := db.NewDB()
+	defer db.Close()
+
+	row := db.QueryRow("SELECT COUNT(transactions.tx_id) FROM blocks LEFT JOIN transactions ON blocks.height=transactions.height WHERE time>?", time.Now().Add(-time.Hour))
+	var count int
+	err := row.Scan(&count)
+	if err == sql.ErrNoRows {
+		return map[string]int{"count": 0}, nil
+	}
+	if err != nil {
+		return nil, resp.InternalServerErr
+	}
+	return map[string]int{
+		"count": count,
+	}, nil
 }

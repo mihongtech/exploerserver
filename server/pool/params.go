@@ -11,6 +11,7 @@ var Params = map[string]reflect.Type{
 	"/rpc/address/hash":             reflect.TypeOf((*AddressParams)(nil)),
 	"/rpc/search/global":            reflect.TypeOf((*GlobalSearchParams)(nil)),
 	"/rpc/wallet/import/privateKey": reflect.TypeOf((*ImportAccountParams)(nil)),
+	"/rpc/lastHourTransactionCount": reflect.TypeOf((*LastHourTransactionCountParams)(nil)),
 }
 
 // block
@@ -30,6 +31,9 @@ type BlockListParams struct {
 // transaction
 type TransactionHashParams struct {
 	Hash string `json:"hash"`
+}
+
+type LastHourTransactionCountParams struct {
 }
 
 // wallet

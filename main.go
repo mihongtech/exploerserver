@@ -4,11 +4,11 @@ import (
 	"flag"
 	"os"
 
-	"github.com/linkchain/common/util/log"
+	"github.com/mihongtech/linkchain/common/util/log"
 	"github.com/robfig/cron"
 
-	"github.com/linkchain-explorer/server"
-	"github.com/linkchain-explorer/server/client"
+	"github.com/mihongtech/linkchain-explorer/server"
+	"github.com/mihongtech/linkchain-explorer/server/client"
 )
 
 func main() {
